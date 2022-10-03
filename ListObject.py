@@ -67,7 +67,7 @@ def updateSKU(idList):
     if currentSku in skuTranslationMap:
       priceRecord["sku"] = skuTranslationMap[currentSku]
 
-    print("Updated object " + priceRecord)
+    print("Updated object " + str(priceRecord))
 
     upsertData(priceRecord)
 
@@ -90,11 +90,11 @@ headers = {"Content-Type": "application/json"}
 print( f"fetching all {type_code} from partition {partition}")
 response = requests.post(url, json=payload, headers=headers,auth=('demo_ark_solutions/sm.hasan', 'smhasan123!'))
 # // try catch exceptaion handeling
-priceRecord = response.json()["response"]["data"]
-priceRecordID = []
-for obj in priceRecord:
-  priceRecordID.append(obj["typedId"])
+priceRecords = response.json()["response"]["data"]
+priceRecordIDs = []
+for obj in priceRecords:
+  priceRecordIDs.append(obj["typedId"])
 
 
-print("Fetched typedIds" + priceRecordID)
-updateSKU(priceRecordID)
+print("Fetched typedIds" + str(priceRecordIDs))
+updateSKU(priceRecordIDs)
