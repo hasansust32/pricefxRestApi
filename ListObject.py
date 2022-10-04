@@ -3,7 +3,7 @@ import sys
 # Saving the reference of the standard output
 original_stdout = sys.stdout
 
-with open('UpdateProduct.txt', 'a') as f:
+with open('01.UpdatePriceParameter.txt', 'a') as f:
     sys.stdout = f
 
     import requests
@@ -108,5 +108,5 @@ with open('UpdateProduct.txt', 'a') as f:
     # print('This message will be written to a file.')
     # # Reset the standard output
     sys.stdout = original_stdout
-print("hello hasan")
+
 

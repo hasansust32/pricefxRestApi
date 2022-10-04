@@ -75,8 +75,8 @@ with open('02.UpdateProduct.txt', 'a') as f:
         if currentSku in skuTranslationMap:
           priceRecords["sku"] = skuTranslationMap[currentSku]
 
-        print("Updated object " + str(priceRecords))
-        upsertData(priceRecords)
+        print("Updated object " + str(Products))
+        upsertData(Products)
 
 
     type_code = "P"
@@ -96,13 +96,13 @@ with open('02.UpdateProduct.txt', 'a') as f:
     print(f"fetching all {type_code} from partition {partition}")
     response = requests.post(url, json=payload, headers=headers, auth=('demo_ark_solutions/sm.hasan', 'smhasan123!'))
     # // try catch exceptaion handeling
-    priceRecords = response.json()["response"]["data"]
-    priceRecordIDs = []
-    for obj in priceRecords:
-      priceRecordIDs.append(obj["typedId"])
+    Products = response.json()["response"]["data"]
+    ProductIDs = []
+    for obj in Products:
+      ProductIDs.append(obj["typedId"])
 
-    print("Fetched typedIds" + str(priceRecordIDs))
-    updateSKU(priceRecordIDs)
+    print("Fetched typedIds" + str(ProductIDs))
+    updateSKU(ProductIDs)
 
 
     # print('Hello, Python!')
