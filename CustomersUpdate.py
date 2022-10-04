@@ -9,7 +9,7 @@ with open('02.UpdateProduct.txt', 'a') as f:
     import requests
     def upsertData(payload):
       if "sku" in payload:
-        type_code = "P"
+        type_code = "C"
         base_url = "demo-eu.demo1.pricefx.com"
         partition = "demo_ark_solutions"
         url = "https://" + base_url + "/pricefx/" + partition + "/integrate/" + type_code
@@ -45,11 +45,11 @@ with open('02.UpdateProduct.txt', 'a') as f:
         myID = id.split(".")[0]
 
         skuTranslationMap = {
-          "MB-0001": "Hasan001",
-          "MB-0002": "Hasan002",
-          "MB-0003": "Hasan003",
-          "MB-0004": "Hasan004",
-          "MB-0005": "Hasan005"
+          "CD-00001": "Hasan001",
+          "CD-00002": "Hasan002",
+          "CD-00003": "Hasan003",
+          "CD-00004": "Hasan004",
+          "CD-00005": "Hasan005"
 
           # "SUB003": "ABD",
           # "R9H13602": "ABF",
@@ -57,7 +57,7 @@ with open('02.UpdateProduct.txt', 'a') as f:
           # "C2": "ABH"
         }
 
-        type_code = "P"
+        type_code = "C"
         base_url = "demo-eu.demo1.pricefx.com"
         partition = "demo_ark_solutions"
         url = "https://" + base_url + "/pricefx/" + partition + "/fetch/" + type_code + "/" + myID
@@ -66,20 +66,20 @@ with open('02.UpdateProduct.txt', 'a') as f:
 
         response = requests.post(url, auth=('demo_ark_solutions/sm.hasan', 'smhasan123!'))
 
-        productRecords = response.json()["response"]["data"][0]
-        print(f"Fetched object {productRecords}")
+        customerRecords = response.json()["response"]["data"][0]
+        print(f"Fetched object {customerRecords}")
 
-        if "sku" in productRecords:
-          currentSku = productRecords["sku"]
+        if "sku" in customerRecords:
+          currentSku = customerRecords["sku"]
 
         if currentSku in skuTranslationMap:
-          productRecords["sku"] = skuTranslationMap[currentSku]
+          customerRecords["sku"] = skuTranslationMap[currentSku]
 
-        print("Updated object " + str(Products))
-        upsertData(Products)
+        print("Updated object " + str(Customers))
+        upsertData(Customers)
 
 
-    type_code = "P"
+    type_code = "C"
     print("starting data migration for Type Code " + type_code)
     base_url = "demo-eu.demo1.pricefx.com"
     partition = "demo_ark_solutions"
@@ -96,13 +96,13 @@ with open('02.UpdateProduct.txt', 'a') as f:
     print(f"fetching all {type_code} from partition {partition}")
     response = requests.post(url, json=payload, headers=headers, auth=('demo_ark_solutions/sm.hasan', 'smhasan123!'))
     # // try catch exceptaion handeling
-    Products = response.json()["response"]["data"]
-    ProductIDs = []
-    for obj in Products:
-      ProductIDs.append(obj["typedId"])
+    Customers = response.json()["response"]["data"]
+    CustomerIDs = []
+    for obj in Customers:
+        CustomerIDs.append(obj["typedId"])
 
-    print("Fetched typedIds" + str(ProductIDs))
-    updateSKU(ProductIDs)
+    print("Fetched typedIds" + str(CustomerIDs))
+    updateSKU(CustomerIDs)
 
 
     # print('Hello, Python!')

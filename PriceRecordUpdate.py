@@ -3,7 +3,7 @@ import sys
 # Saving the reference of the standard output
 original_stdout = sys.stdout
 
-with open('01.UpdatePriceParameter.txt', 'a') as f:
+with open('01.UpdatePriceRecord.txt', 'a') as f:
     sys.stdout = f
 
     import requests
@@ -79,7 +79,7 @@ with open('01.UpdatePriceParameter.txt', 'a') as f:
 
 
     type_code = "PR"
-    print("starting data migration for " + type_code)
+    print("starting data migration for Type Code " + type_code)
     base_url = "demo-eu.demo1.pricefx.com"
     partition = "demo_ark_solutions"
     url = "https://" + base_url + "/pricefx/" + partition + "/fetch/" + type_code

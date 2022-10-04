@@ -1,7 +1,7 @@
 import requests
 
 type_code = "P"
-print("starting data migration for " + type_code)
+print("starting data migration for Type Code " + type_code)
 base_url = "demo-eu.demo1.pricefx.com"
 partition = "demo_ark_solutions"
 url = "https://" + base_url + "/pricefx/" + partition + "/fetch/" + type_code
