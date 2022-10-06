@@ -3,12 +3,12 @@ import sys
 # Saving the reference of the standard output
 original_stdout = sys.stdout
 
-with open('02.UpdateProduct.txt', 'a') as f:
+with open('01.UpdateCustomer.txt', 'a') as f:
     sys.stdout = f
 
     import requests
     def upsertData(payload):
-      if "sku" in payload:
+      if "customerId" in payload:
         type_code = "C"
         base_url = "demo-eu.demo1.pricefx.com"
         partition = "demo_ark_solutions"
@@ -16,7 +16,7 @@ with open('02.UpdateProduct.txt', 'a') as f:
 
         payload = {
           "data": {
-            "sku": payload["sku"],
+            "customerId": payload["customerId"],
             "typedId": payload["typedId"],
 
             # "label": [payload["label"]],
@@ -40,17 +40,18 @@ with open('02.UpdateProduct.txt', 'a') as f:
         print(data)
 
 
-    def updateSKU(idList):
+    def updateCustomerId(idList):
       for id in idList:
         myID = id.split(".")[0]
 
-        skuTranslationMap = {
-          "CD-00001": "Hasan001",
-          "CD-00002": "Hasan002",
-          "CD-00003": "Hasan003",
-          "CD-00004": "Hasan004",
-          "CD-00005": "Hasan005"
+        CustomerIdTranslationMap = {
+          "CD-00001": "SM-001"
 
+          # "CD-00002": "SM-002",
+          # "CD-00003": "SM-003",
+          # "CD-00004": "SM-004"
+
+          # "SUB001": "ABC",
           # "SUB003": "ABD",
           # "R9H13602": "ABF",
           # "MEG5050-0000": "ABG",
@@ -66,17 +67,17 @@ with open('02.UpdateProduct.txt', 'a') as f:
 
         response = requests.post(url, auth=('demo_ark_solutions/sm.hasan', 'smhasan123!'))
 
-        customerRecords = response.json()["response"]["data"][0]
-        print(f"Fetched object {customerRecords}")
+        priceRecords = response.json()["response"]["data"][0]
+        print(f"Fetched object {priceRecords}")
 
-        if "sku" in customerRecords:
-          currentSku = customerRecords["sku"]
+        if "customerId" in priceRecords:
+          currentCustomerId = priceRecords["customerId"]
 
-        if currentSku in skuTranslationMap:
-          customerRecords["sku"] = skuTranslationMap[currentSku]
+        if currentCustomerId in CustomerIdTranslationMap:
+          priceRecords["customerId"] = CustomerIdTranslationMap[currentCustomerId]
 
-        print("Updated object " + str(Customers))
-        upsertData(Customers)
+        print("Updated object " + str(priceRecords))
+        upsertData(priceRecords)
 
 
     type_code = "C"
@@ -96,13 +97,13 @@ with open('02.UpdateProduct.txt', 'a') as f:
     print(f"fetching all {type_code} from partition {partition}")
     response = requests.post(url, json=payload, headers=headers, auth=('demo_ark_solutions/sm.hasan', 'smhasan123!'))
     # // try catch exceptaion handeling
-    Customers = response.json()["response"]["data"]
-    CustomerIDs = []
-    for obj in Customers:
-        CustomerIDs.append(obj["typedId"])
+    priceRecords = response.json()["response"]["data"]
+    priceRecordIDs = []
+    for obj in priceRecords:
+      priceRecordIDs.append(obj["typedId"])
 
-    print("Fetched typedIds" + str(CustomerIDs))
-    updateSKU(CustomerIDs)
+    print("Fetched typedIds" + str(priceRecordIDs))
+    updateCustomerId(priceRecordIDs)
 
 
     # print('Hello, Python!')
