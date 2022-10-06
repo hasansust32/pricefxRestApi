@@ -97,13 +97,13 @@ with open('01.UpdateCustomer.txt', 'a') as f:
     print(f"fetching all {type_code} from partition {partition}")
     response = requests.post(url, json=payload, headers=headers, auth=('demo_ark_solutions/sm.hasan', 'smhasan123!'))
     # // try catch exceptaion handeling
-    priceRecords = response.json()["response"]["data"]
-    priceRecordIDs = []
-    for obj in priceRecords:
-      priceRecordIDs.append(obj["typedId"])
+    CustomerRecords = response.json()["response"]["data"]
+    CustomerIDs = []
+    for obj in CustomerRecords:
+      CustomerIDs.append(obj["typedId"])
 
-    print("Fetched typedIds" + str(priceRecordIDs))
-    updateCustomerId(priceRecordIDs)
+    print("Fetched typedIds" + str(CustomerIDs))
+    updateCustomerId(CustomerIDs)
 
 
     # print('Hello, Python!')
