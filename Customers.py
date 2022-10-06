@@ -18,8 +18,3 @@ response = requests.post(url, json=payload, headers=headers, auth=('demo_ark_sol
 data = response.json()
 print(data)
 
-
-
-
-
-
