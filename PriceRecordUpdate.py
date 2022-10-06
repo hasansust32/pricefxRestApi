@@ -97,6 +97,8 @@ with open('01.UpdatePriceRecord.txt', 'a') as f:
     # // try catch exceptaion handeling
     priceRecords = response.json()["response"]["data"]
     priceRecordIDs = []
+
+
     for obj in priceRecords:
       priceRecordIDs.append(obj["typedId"])
 
