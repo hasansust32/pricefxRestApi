@@ -10,8 +10,8 @@ with open('01.UpdateLookupTableTypedId.txt', 'a') as f:
     def upsertData(payload):
       if "lookupTableTypedId" in payload:
         type_code = "MLTV"
-        base_url = "demo-eu.demo1.pricefx.com"
-        partition = "demo_ark_solutions"
+        base_url = "fbu-qa.pricefx.eu"
+        partition = "iplex-dev"
         url = "https://" + base_url + "/pricefx/" + partition + "/integrate/" + type_code
 
         payload = {
@@ -34,7 +34,7 @@ with open('01.UpdateLookupTableTypedId.txt', 'a') as f:
         headers = {"Content-Type": "application/json"}
         print(f"Object update request payload {payload}")
         response = requests.post(url, json=payload, headers=headers,
-                                 auth=('demo_ark_solutions/sm.hasan', 'smhasan123!'))
+                                 auth=('iplex-dev/sm.hasan', 'start123'))
         # print response statu
         data = response.json()
         print(data)
@@ -58,13 +58,13 @@ with open('01.UpdateLookupTableTypedId.txt', 'a') as f:
         }
 
         type_code = "MLTV"
-        base_url = "demo-eu.demo1.pricefx.com"
-        partition = "demo_ark_solutions"
+        base_url = "fbu-qa.pricefx.eu"
+        partition = "iplex-dev"
         url = "https://" + base_url + "/pricefx/" + partition + "/fetch/" + type_code + "/" + myID
 
         print(f"Fetching object {myID}")
 
-        response = requests.post(url, auth=('demo_ark_solutions/sm.hasan', 'smhasan123!'))
+        response = requests.post(url, auth=('iplex-dev/sm.hasan', 'start123'))
 
         priceRecords = response.json()["response"]["data"][0]
         print(f"Fetched object {priceRecords}")
@@ -81,8 +81,8 @@ with open('01.UpdateLookupTableTypedId.txt', 'a') as f:
 
     type_code = "MLTV"
     print("starting data migration for Type Code " + type_code)
-    base_url = "demo-eu.demo1.pricefx.com"
-    partition = "demo_ark_solutions"
+    base_url = "fbu-qa.pricefx.eu"
+    partition = "iplex-dev"
     url = "https://" + base_url + "/pricefx/" + partition + "/fetch/" + type_code
 
     payload = {
@@ -94,7 +94,7 @@ with open('01.UpdateLookupTableTypedId.txt', 'a') as f:
 
     headers = {"Content-Type": "application/json"}
     print(f"fetching all {type_code} from partition {partition}")
-    response = requests.post(url, json=payload, headers=headers, auth=('demo_ark_solutions/sm.hasan', 'smhasan123!'))
+    response = requests.post(url, json=payload, headers=headers, auth=('iplex-dev/sm.hasan', 'start123'))
     # // try catch exceptaion handeling
     priceParameters = response.json()["response"]["data"]
     priceParameterIDs = []
