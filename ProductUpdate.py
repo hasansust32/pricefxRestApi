@@ -16,8 +16,8 @@ with open('02.UpdateProduct.txt', 'a') as f:
 
         payload = {
           "data": {
-            "sku": payload["sku"],
             "typedId": payload["typedId"],
+              "sku": payload["sku"]
 
             # "label": [payload["label"]],
             # "unitOfMeasure": payload["unitOfMeasure"],
@@ -40,22 +40,30 @@ with open('02.UpdateProduct.txt', 'a') as f:
         print(data)
 
 
+    def Migration():
+        import csv
+
+        with open("DataSet/ProductMappingData.csv", 'r') as file:
+            csvreader = csv.reader(file)
+            Migration = {
+
+            }
+
+            for row in csvreader:
+                Migration[row[0]] = row[1]
+
+            return (Migration)
+
+
+        # print(Migration())
+
+
     def updateSKU(idList):
       for id in idList:
         myID = id.split(".")[0]
 
-        skuTranslationMap = {
-          "MB-0001": "Hasan001",
-          "MB-0002": "Hasan002",
-          "MB-0003": "Hasan003",
-          "MB-0004": "Hasan004",
-          "MB-0005": "Hasan005"
 
-          # "SUB003": "ABD",
-          # "R9H13602": "ABF",
-          # "MEG5050-0000": "ABG",
-          # "C2": "ABH"
-        }
+        translationMap = Migration()
 
         type_code = "P"
         base_url = "fbu-qa.pricefx.eu"
@@ -72,8 +80,8 @@ with open('02.UpdateProduct.txt', 'a') as f:
         if "sku" in productRecords:
           currentSku = productRecords["sku"]
 
-        if currentSku in skuTranslationMap:
-          productRecords["sku"] = skuTranslationMap[currentSku]
+        if currentSku in translationMap:
+          productRecords["sku"] = translationMap[currentSku]
 
         print("Updated object " + str(Products))
         upsertData(Products)
