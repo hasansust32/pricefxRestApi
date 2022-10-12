@@ -44,6 +44,7 @@ with open('01.UpdateCustomer.txt', 'a') as f:
       for id in idList:
         myID = id.split(".")[0]
 
+
         CustomerIdTranslationMap = {
           "CD-00001": "SM-001"
 
