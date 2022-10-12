@@ -29,4 +29,6 @@ headers = {"Content-Type": "application/json"}
 response = requests.post(url, json=payload, headers=headers, auth=('demo_ark_solutions/sm.hasan', 'smhasan123!'))
 
 data = response.json()["response"]["data"]
+
+
 print(data)
