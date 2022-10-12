@@ -3,7 +3,7 @@ import sys
 # Saving the reference of the standard output
 original_stdout = sys.stdout
 
-with open('02.UpdateProduct.txt', 'a') as f:
+with open('01.UpdateProductMigration.txt', 'a') as f:
     sys.stdout = f
 
     import requests
@@ -19,14 +19,6 @@ with open('02.UpdateProduct.txt', 'a') as f:
             "typedId": payload["typedId"],
               "sku": payload["sku"]
 
-            # "label": [payload["label"]],
-            # "unitOfMeasure": payload["unitOfMeasure"],
-            # "currency": payload["currency"],
-            # "formulaName": payload["formulaName"],
-            # "attribute1": payload["attribute1"],
-            # "attribute2": payload["attribute2"],
-            # "userGroupEdit": payload["userGroupEdit"],
-            # "userGroupViewDetails": payload["userGroupViewDetails"]
 
           }
         }
@@ -65,6 +57,7 @@ with open('02.UpdateProduct.txt', 'a') as f:
 
         translationMap = Migration()
 
+
         type_code = "P"
         base_url = "fbu-qa.pricefx.eu"
         partition = "iplex-dev"
@@ -74,17 +67,17 @@ with open('02.UpdateProduct.txt', 'a') as f:
 
         response = requests.post(url,  auth=('iplex-dev/sm.hasan', 'start123'))
 
-        productRecords = response.json()["response"]["data"][0]
-        print(f"Fetched object {productRecords}")
+        AllProducts = response.json()["response"]["data"][0]
+        print(f"Fetched object {AllProducts}")
 
-        if "sku" in productRecords:
-          currentSku = productRecords["sku"]
+        if "sku" in AllProducts:
+          currentSku = AllProducts["sku"]
 
         if currentSku in translationMap:
-          productRecords["sku"] = translationMap[currentSku]
+          AllProducts["sku"] = translationMap[currentSku]
 
-        print("Updated object " + str(Products))
-        upsertData(Products)
+        print("Updated object " + str(AllProducts))
+        upsertData(AllProducts)
 
 
     type_code = "P"
@@ -94,7 +87,7 @@ with open('02.UpdateProduct.txt', 'a') as f:
     url = "https://" + base_url + "/pricefx/" + partition + "/fetch/" + type_code
 
     payload = {
-      "endRow": 300,
+      "endRow": 5500,
       "operationType": "fetch",
       "startRow": 0,
       "textMatchStyle": "exact"
