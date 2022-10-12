@@ -3,7 +3,7 @@ import sys
 # Saving the reference of the standard output
 original_stdout = sys.stdout
 
-with open('01.UpdateCustomer.txt', 'a') as f:
+with open('01.UpdateCustomerMigration.txt', 'a') as f:
     sys.stdout = f
 
     import requests
@@ -16,17 +16,9 @@ with open('01.UpdateCustomer.txt', 'a') as f:
 
         payload = {
           "data": {
-            "customerId": payload["customerId"],
-            "typedId": payload["typedId"],
 
-            # "label": [payload["label"]],
-            # "unitOfMeasure": payload["unitOfMeasure"],
-            # "currency": payload["currency"],
-            # "formulaName": payload["formulaName"],
-            # "attribute1": payload["attribute1"],
-            # "attribute2": payload["attribute2"],
-            # "userGroupEdit": payload["userGroupEdit"],
-            # "userGroupViewDetails": payload["userGroupViewDetails"]
+            "typedId": payload["typedId"],
+            "customerId": payload["customerId"]
 
           }
         }
@@ -39,25 +31,31 @@ with open('01.UpdateCustomer.txt', 'a') as f:
         data = response.json()
         print(data)
 
+    def Migration():
+        import csv
+
+        with open("DataSet/Customer Mapping.csv", 'r') as file:
+            csvreader = csv.reader(file)
+            Migration = {
+
+            }
+
+            for row in csvreader:
+                Migration[row[0]] = row[1]
+
+            return (Migration)
+
+
+
 
     def updateCustomerId(idList):
       for id in idList:
         myID = id.split(".")[0]
 
 
-        CustomerIdTranslationMap = {
-          "CD-00001": "SM-001"
 
-          # "CD-00002": "SM-002",
-          # "CD-00003": "SM-003",
-          # "CD-00004": "SM-004"
+        translationMap = Migration()
 
-          # "SUB001": "ABC",
-          # "SUB003": "ABD",
-          # "R9H13602": "ABF",
-          # "MEG5050-0000": "ABG",
-          # "C2": "ABH"
-        }
 
         type_code = "C"
         base_url = "fbu-qa.pricefx.eu"
@@ -68,17 +66,17 @@ with open('01.UpdateCustomer.txt', 'a') as f:
 
         response = requests.post(url, auth=('iplex-dev/sm.hasan', 'start123'))
 
-        priceRecords = response.json()["response"]["data"][0]
-        print(f"Fetched object {priceRecords}")
+        AllCustomers = response.json()["response"]["data"][0]
+        print(f"Fetched object {AllCustomers}")
 
-        if "customerId" in priceRecords:
-          currentCustomerId = priceRecords["customerId"]
+        if "customerId" in AllCustomers:
+          currentCustomerId = AllCustomers["customerId"]
 
-        if currentCustomerId in CustomerIdTranslationMap:
-          priceRecords["customerId"] = CustomerIdTranslationMap[currentCustomerId]
+        if currentCustomerId in translationMap:
+          AllCustomers["customerId"] = translationMap[currentCustomerId]
 
-        print("Updated object " + str(priceRecords))
-        upsertData(priceRecords)
+        print("Updated object " + str(AllCustomers))
+        upsertData(AllCustomers)
 
 
     type_code = "C"
@@ -88,7 +86,7 @@ with open('01.UpdateCustomer.txt', 'a') as f:
     url = "https://" + base_url + "/pricefx/" + partition + "/fetch/" + type_code
 
     payload = {
-      "endRow": 300,
+      "endRow": 1500,
       "operationType": "fetch",
       "startRow": 0,
       "textMatchStyle": "exact"
