@@ -15,7 +15,7 @@ payload = {
 
 headers = {"Content-Type": "application/json"}
 response = requests.post(url, json=payload, headers=headers, auth=('iplex-dev/sm.hasan', 'start123'))
-data = response.json()
+data = response.json()["response"]["data"]
 print(data)
 
 
