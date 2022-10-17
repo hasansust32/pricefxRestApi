@@ -7,7 +7,7 @@ partition = "iplex-dev"
 url = "https://" + base_url + "/pricefx/" + partition + "/fetch/" + type_code
 
 payload = {
-  "endRow": 300,
+  "endRow": 5200,
   "operationType": "fetch",
   "startRow": 0,
   "textMatchStyle": "exact"

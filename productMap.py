@@ -43,21 +43,20 @@
 #
 
 
-
-
-
-def productMap():
+def Migration():
     import csv
 
     with open("DataSet/ProductMappingData.csv", 'r') as file:
         csvreader = csv.reader(file)
-        productMap = {
+        Migration = {
 
         }
 
         for row in csvreader:
-            productMap[row[ 0]] = row[1]
+            Migration[row[0]] = row[1]
 
-        return (productMap)
+        return (Migration)
 
-print(productMap())
+
+print(Migration())
+
