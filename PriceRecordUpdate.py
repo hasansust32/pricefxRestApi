@@ -16,20 +16,13 @@ with open('01.UpdatePriceRecord.txt', 'a') as f:
 
         payload = {
           "data": {
-            "sku": payload["sku"],
             "typedId": payload["typedId"],
-
-            # "label": [payload["label"]],
-            # "unitOfMeasure": payload["unitOfMeasure"],
-            # "currency": payload["currency"],
-            # "formulaName": payload["formulaName"],
-            # "attribute1": payload["attribute1"],
-            # "attribute2": payload["attribute2"],
-            # "userGroupEdit": payload["userGroupEdit"],
-            # "userGroupViewDetails": payload["userGroupViewDetails"]
-
+            "sku": payload["sku"],
+            "customerId": payload["customerId"]
           }
         }
+
+
 
         headers = {"Content-Type": "application/json"}
         print(f"Object update request payload {payload}")
@@ -40,21 +33,46 @@ with open('01.UpdatePriceRecord.txt', 'a') as f:
         print(data)
 
 
-    def updateSKU(idList):
+    def ProductMigration():
+        import csv
+
+        with open("DataSet/ProductMappingData.csv", 'r') as file1:
+            csvreader = csv.reader(file1)
+            Migration1 = {
+
+            }
+
+            for row in csvreader:
+                Migration1[row[0]] = row[1]
+
+            return (Migration1)
+
+    def CustomerMigration():
+        import csv
+
+        with open("DataSet/CustomerMapForPR.csv", 'r') as file2:
+            csvreader = csv.reader(file2)
+            Migration2 = {
+
+            }
+
+            for row in csvreader:
+                Migration2[row[0]] = row[1]
+
+            return (Migration2)
+
+
+
+
+
+    def updatePriceRecord(idList):
       for id in idList:
         myID = id.split(".")[0]
 
-        skuTranslationMap = {
-          "A9N2103": "XYZ",
-          "A9N17581": "XYA",
-          "BR1200S-JP": "ABE",
-          "BN1350M2": "XYB",
-          "SUB001": "ABC",
-          "SUB003": "ABD",
-          "R9H13602": "ABF",
-          "MEG5050-0000": "ABG",
-          "C2": "ABH"
-        }
+        ProductTranslationMap = ProductMigration()
+        CustomerTranslationMap = CustomerMigration()
+
+
 
         type_code = "PR"
         base_url = "fbu-qa.pricefx.eu"
@@ -65,27 +83,37 @@ with open('01.UpdatePriceRecord.txt', 'a') as f:
 
         response = requests.post(url, auth=('iplex-dev/sm.hasan', 'start123'))
 
-        priceRecords = response.json()["response"]["data"][0]
-        print(f"Fetched object {priceRecords}")
+        priceRecord = response.json()["response"]["data"][0]
+        print(f"Fetched object {priceRecord}")
 
-        if "sku" in priceRecords:
-          currentSku = priceRecords["sku"]
+        if "sku" in priceRecord:
+          currentSku = priceRecord["sku"]
 
-        if currentSku in skuTranslationMap:
-          priceRecords["sku"] = skuTranslationMap[currentSku]
+        if currentSku in ProductTranslationMap:
+          priceRecord["sku"] = ProductTranslationMap[currentSku]
 
-        print("Updated object " + str(priceRecords))
-        upsertData(priceRecords)
+        if "customerId" in priceRecord:
+          currentCustomerId = priceRecord["customerId"]
+
+        if currentCustomerId in CustomerTranslationMap:
+          priceRecord["customerId"] = CustomerTranslationMap[currentCustomerId]
+
+        print("Updated object " + str(priceRecord))
+
+
+
+        upsertData(priceRecord)
 
 
     type_code = "PR"
+    print(f"#-----------------------------------------------------------------------------------------------------------------------------------------------------")
     print("starting data migration for Type Code " + type_code)
     base_url = "fbu-qa.pricefx.eu"
     partition = "iplex-dev"
     url = "https://" + base_url + "/pricefx/" + partition + "/fetch/" + type_code
 
     payload = {
-      "endRow": 300,
+      "endRow": 5500,
       "operationType": "fetch",
       "startRow": 0,
       "textMatchStyle": "exact"
@@ -98,12 +126,18 @@ with open('01.UpdatePriceRecord.txt', 'a') as f:
     priceRecords = response.json()["response"]["data"]
     priceRecordIDs = []
 
-
     for obj in priceRecords:
       priceRecordIDs.append(obj["typedId"])
 
     print("Fetched typedIds" + str(priceRecordIDs))
-    updateSKU(priceRecordIDs)
+    updatePriceRecord(priceRecordIDs)
+
+    CustomerIDs = []
+    for obj in priceRecords:
+      CustomerIDs.append(obj["typedId"])
+
+    print("Fetched typedIds" + str(CustomerIDs))
+    updatePriceRecord(CustomerIDs)
 
 
     # print('Hello, Python!')
