@@ -34,7 +34,7 @@ with open('01.UpdateCustomerMigration.txt', 'a') as f:
     def Migration():
         import csv
 
-        with open("DataSet/Customer Mapping.csv", 'r') as file:
+        with open("DataSet/New_Customer_Mapping_Sheet1.csv", 'r') as file:
             csvreader = csv.reader(file)
             Migration = {
 
