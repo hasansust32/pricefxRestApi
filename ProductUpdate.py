@@ -6,7 +6,7 @@ import sys
 # Saving the reference of the standard output
 original_stdout = sys.stdout
 
-with open('02.Reverse_Product_Migration.txt', 'a') as f:
+with open('03.Non_migrated_Product_Migration.txt', 'a') as f:
     sys.stdout = f
 
     import requests
@@ -41,14 +41,14 @@ with open('02.Reverse_Product_Migration.txt', 'a') as f:
 
         with open("DataSet/ReverseProductMapping2.csv", 'r') as file:
             csvreader = csv.reader(file)
-            Migration = {
+            migration = {
 
             }
 
             for row in csvreader:
-                Migration[row[0]] = row[1]
+                migration[row[0]] = row[1]
 
-            return (Migration)
+            return migration
 
 
     def updateSKU(idList):
@@ -67,8 +67,8 @@ with open('02.Reverse_Product_Migration.txt', 'a') as f:
             print(f"Fetching object {myID}")
 
             response = requests.post(url, auth=('iplex-dev/sm.hasan', 'start123'))
-
             ProductData = response.json()["response"]["data"][0]
+
             print(f"Fetched object {ProductData}")
 
             if "sku" in ProductData:
@@ -76,13 +76,8 @@ with open('02.Reverse_Product_Migration.txt', 'a') as f:
 
             if currentSku in translationMap:
                 ProductData["sku"] = translationMap[currentSku]
-
-            print("Updated object " + str(ProductData))
-
-            upsertData(ProductData)
-
-
-
+                print("Updated object " + str(ProductData))
+                upsertData(ProductData)
 
 
 
