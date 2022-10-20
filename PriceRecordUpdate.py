@@ -3,7 +3,7 @@ import sys
 # Saving the reference of the standard output
 original_stdout = sys.stdout
 
-with open('Hasan_PriceRecord_Update1.txt', 'a') as f:
+with open('01.Final_PriceRecord_Update1.txt', 'a') as f:
     sys.stdout = f
 
     import requests
@@ -36,7 +36,7 @@ with open('Hasan_PriceRecord_Update1.txt', 'a') as f:
     def ProductMigration():
         import csv
 
-        with open("DataSet/UpdatedProductMapping.csv", 'r') as file1:
+        with open("DataSet/ProductMappingData.csv", 'r') as file1:
             csvreader = csv.reader(file1)
             Migration1 = {
 
